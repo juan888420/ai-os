@@ -1,48 +1,31 @@
-import { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
+import { ChatContainer } from "./components/ChatContainer";
+import { MessageInput } from "./components/MessageInput";
+import "./App.css";
 
 export default function App() {
-  const [text, setText] = useState("");
-
   const messages = useQuery(api.messages.getMessages, {
     customerId: "demo",
   });
 
   const sendMessage = useMutation(api.messages.sendMessage);
 
+  const handleSend = (text: string) => {
+    sendMessage({
+      customerId: "demo",
+      content: text,
+    });
+  };
+
   return (
-    <div style={{ padding: 20 }}>
-      <h1>AI OS MVP</h1>
-
-      <div style={{ marginBottom: 20 }}>
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Escribe un mensaje..."
-        />
-
-        <button
-          onClick={() => {
-            sendMessage({
-              customerId: "demo",
-              content: text,
-            });
-            setText("");
-          }}
-        >
-          Enviar
-        </button>
+    <div className="app">
+      <div className="app-header">
+        <h1>AI OS Chat</h1>
       </div>
-
-      <h3>Mensajes:</h3>
-
-      <div>
-        {messages?.map((m) => (
-          <div key={m._id}>
-            <b>{m.role}:</b> {m.content}
-          </div>
-        ))}
+      <div className="app-content">
+        <ChatContainer messages={messages} />
+        <MessageInput onSend={handleSend} />
       </div>
     </div>
   );
