@@ -5,7 +5,7 @@ interface Message {
   _id: string;
   role: string;
   content: string;
-  timestamp?: Date;
+  createdAt: number;
 }
 
 interface ChatContainerProps {
@@ -38,7 +38,7 @@ export function ChatContainer({ messages, isLoading }: ChatContainerProps) {
           key={message._id}
           role={(message.role as "user" | "assistant") || "assistant"}
           content={message.content}
-          timestamp={message.timestamp}
+          timestamp={new Date(message.createdAt)}
         />
       ))}
       {isLoading && (
