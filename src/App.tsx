@@ -4,9 +4,21 @@ import { ChatContainer } from "./components/ChatContainer";
 import { MessageInput } from "./components/MessageInput";
 import "./App.css";
 
+function getOrCreateAnonymousCustomerId(): string {
+  const storageKey = "aios:customerId";
+  let customerId = localStorage.getItem(storageKey);
+  if (!customerId) {
+    customerId = crypto.randomUUID();
+    localStorage.setItem(storageKey, customerId);
+  }
+  return customerId;
+}
+
+const anonymousCustomerId = getOrCreateAnonymousCustomerId();
+
 export default function App() {
   const messages = useQuery(api.messages.getMessages, {
-    customerId: "demo",
+    customerId: anonymousCustomerId,
   });
 
   const sendMessage = useMutation(api.messages.sendMessage);
@@ -18,7 +30,7 @@ export default function App() {
 
   const handleSend = (text: string) => {
     sendMessage({
-      customerId: "demo",
+      customerId: anonymousCustomerId,
       content: text,
     });
   };
