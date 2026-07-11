@@ -1,16 +1,44 @@
-/* Landing — consume los tokens globales definidos en App.css (:root) */
+/* Landing — dirección visual propia (tinta profunda, hairlines, voz de sistema).
+   Tokens locales de la landing; el chat conserva los suyos en App.css. */
 
 .landing {
+  --l-bg: #0b0e14;
+  --l-surface: #10141c;
+  --l-surface-2: #141a24;
+  --l-border: rgba(255, 255, 255, 0.07);
+  --l-border-strong: rgba(255, 255, 255, 0.14);
+  --l-text: #e8eaf0;
+  --l-text-secondary: #a9b1c2;
+  --l-text-muted: #8a93a6;
+  --l-accent: #38bdf8;
+  --l-cta: #0369a1;
+  --l-cta-hover: #075985;
+  --l-ok: #34d399; /* solo estado */
+  --l-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --l-container: max(1.5rem, calc((100% - 72rem) / 2));
+
   min-height: 100vh;
   min-height: 100dvh;
   overflow-y: auto;
-  background: var(--background);
-  color: var(--text-primary);
+  background: var(--l-bg);
+  color: var(--l-text);
+  font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .landing main {
   display: flex;
   flex-direction: column;
+}
+
+/* Voz mono: kickers, índices, estados */
+.landing-kicker {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--l-text-muted);
+  margin-bottom: 1rem;
 }
 
 /* Nav */
@@ -21,212 +49,220 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem max(1.5rem, calc((100% - 72rem) / 2));
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--border);
+  padding: 1rem var(--l-container);
+  background: rgba(11, 14, 20, 0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--l-border);
 }
 
 .landing-brand {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--text-primary);
+  letter-spacing: 0.01em;
+  color: var(--l-text);
 }
 
-/* CTA */
+/* CTA — plano, preciso, sin glow */
 .landing-cta {
-  padding: 0.875rem 1.75rem;
-  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+  padding: 0.75rem 1.5rem;
+  background: var(--l-cta);
   color: #ffffff;
-  border: none;
-  border-radius: 0.75rem;
-  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+  transition: background 0.2s var(--l-ease), transform 0.15s var(--l-ease);
 }
 
 .landing-cta:hover {
-  background: linear-gradient(135deg, #075985 0%, #0c4a6e 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.35);
+  background: var(--l-cta-hover);
 }
 
 .landing-cta:active {
-  transform: translateY(0) scale(0.98);
+  transform: scale(0.98);
 }
 
 .landing-cta:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--l-accent);
   outline-offset: 2px;
 }
 
 .landing-cta-small {
-  padding: 0.5rem 1.125rem;
-  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
 }
 
-/* Hero */
+/* Hero — editorial, un solo foco */
 .landing-hero {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  align-items: center;
-  gap: 3rem;
-  padding: 5rem max(1.5rem, calc((100% - 72rem) / 2)) 6rem;
-}
-
-.landing-hero-copy h1 {
-  font-size: clamp(2.25rem, 5vw, 3.5rem);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-  margin-bottom: 1.25rem;
-}
-
-.landing-accent {
-  color: var(--primary);
-}
-
-.landing-hero-copy p {
-  font-size: 1.125rem;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  max-width: 34rem;
-  margin-bottom: 2rem;
-}
-
-/* Mockup del chat (estático, desacoplado del chat real) */
-.landing-mockup {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-}
-
-.landing-mockup-bar {
-  display: flex;
-  gap: 0.375rem;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.landing-mockup-dot {
-  width: 0.625rem;
-  height: 0.625rem;
-  border-radius: 50%;
-  background: var(--surface-light);
-}
-
-.landing-mockup-body {
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
+  align-items: flex-start;
+  padding: 7rem var(--l-container) 8rem;
+}
+
+.landing-hero h1 {
+  max-width: 48rem;
+  font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  margin-bottom: 1.5rem;
+}
+
+.landing-caret {
+  display: inline-block;
+  width: 3px;
+  height: 0.85em;
+  margin-left: 0.15em;
+  vertical-align: baseline;
+  background: var(--l-accent);
+}
+
+.landing-sub {
+  max-width: 36rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--l-text-secondary);
+  margin-bottom: 2.5rem;
+}
+
+/* Consola de operaciones (mockup estático) */
+.landing-console {
+  align-self: flex-end;
+  width: min(34rem, 100%);
+  margin-top: 4rem;
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.landing-console-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--l-border);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--l-text-muted);
+}
+
+.landing-console-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.landing-status-dot {
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--l-ok);
+}
+
+.landing-console-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   padding: 1.25rem;
 }
 
-.landing-mockup-bubble {
+.landing-console-bubble {
   max-width: 85%;
-  padding: 0.75rem 1rem;
-  border-radius: 1rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.625rem;
   font-size: 0.875rem;
   line-height: 1.5;
 }
 
-.landing-mockup-user {
+.landing-console-user {
   align-self: flex-end;
-  background: var(--user-bg);
+  background: var(--l-cta);
   color: #ffffff;
-  border-bottom-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.2rem;
 }
 
-.landing-mockup-assistant {
+.landing-console-assistant {
   align-self: flex-start;
-  background: var(--background);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  border-bottom-left-radius: 0.25rem;
+  background: var(--l-surface-2);
+  color: var(--l-text);
+  border: 1px solid var(--l-border);
+  border-bottom-left-radius: 0.2rem;
 }
 
-.landing-mockup-typing {
+.landing-console-typing {
   display: flex;
   gap: 0.3rem;
   align-items: center;
-  min-height: 2.25rem;
+  min-height: 2rem;
 }
 
-.landing-mockup-typing span {
-  width: 0.4rem;
-  height: 0.4rem;
+.landing-console-typing span {
+  width: 0.35rem;
+  height: 0.35rem;
   border-radius: 50%;
-  background: var(--text-muted);
-  animation: landing-pulse 1.2s ease-in-out infinite;
-}
-
-.landing-mockup-typing span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.landing-mockup-typing span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes landing-pulse {
-  0%, 60%, 100% {
-    opacity: 0.35;
-    transform: translateY(0);
-  }
-  30% {
-    opacity: 1;
-    transform: translateY(-3px);
-  }
+  background: var(--l-text-muted);
 }
 
 /* Secciones */
 .landing-section {
-  padding: 4rem max(1.5rem, calc((100% - 72rem) / 2));
+  padding: 4.5rem var(--l-container);
+  border-top: 1px solid var(--l-border);
 }
 
 .landing-section h2,
 .landing-final-cta h2 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.5rem, 3vw, 2.125rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
   text-wrap: balance;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
-/* ¿Qué puede hacer AI OS? */
+/* Capacidades — tabla de sistema con hairlines */
 .landing-capabilities {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  gap: 1px;
+  background: var(--l-border);
+  border: 1px solid var(--l-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
 
 .landing-capability {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  gap: 0.875rem;
+  padding: 1.5rem 1.25rem;
+  background: var(--l-bg);
+}
+
+.landing-capability-index {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--l-text-muted);
+}
+
+.landing-capability-label {
+  font-size: 0.9375rem;
   font-weight: 500;
 }
 
-/* Iconos */
 .landing-icon {
   display: inline-flex;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
   flex-shrink: 0;
-  color: var(--primary);
+  color: var(--l-text-secondary);
 }
 
 .landing-icon svg {
@@ -234,86 +270,99 @@
   height: 100%;
 }
 
-/* Características */
-.landing-features {
+/* Características — bento asimétrico */
+.landing-bento {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
 }
 
-.landing-feature {
-  padding: 1.5rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
+.landing-bento-cell {
+  padding: 1.75rem;
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: 0.75rem;
 }
 
-.landing-feature .landing-icon {
-  width: 2rem;
-  height: 2rem;
-  margin-bottom: 1rem;
+.landing-bento-dominant {
+  grid-column: span 2;
+  padding: 2.25rem;
+  background: var(--l-surface-2);
 }
 
-.landing-feature h3 {
+.landing-bento-cell h3 {
   font-size: 1.0625rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.625rem;
 }
 
-.landing-feature p {
-  font-size: 0.9rem;
+.landing-bento-dominant h3 {
+  font-size: 1.25rem;
+}
+
+.landing-bento-cell p {
+  font-size: 0.9375rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--l-text-secondary);
+  max-width: 34rem;
 }
 
-/* Cómo funciona */
+.landing-bento-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--l-border);
+  border-radius: 2rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--l-text-muted);
+}
+
+/* Cómo funciona — líneas de prompt */
 .landing-steps {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  counter-reset: steps;
+  max-width: 44rem;
 }
 
 .landing-step {
-  padding: 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: 1rem;
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.5rem 0;
 }
 
-.landing-step-number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: var(--user-bg);
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
+.landing-step + .landing-step {
+  border-top: 1px solid var(--l-border);
+}
+
+.landing-step-marker {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 1rem;
+  color: var(--l-text-muted);
+  line-height: 1.5;
 }
 
 .landing-step h3 {
   font-size: 1.0625rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.375rem;
 }
 
 .landing-step p {
-  font-size: 0.9rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--l-text-secondary);
 }
 
 /* CTA final */
 .landing-final-cta {
   text-align: center;
-  padding: 5rem max(1.5rem, calc((100% - 72rem) / 2));
-  border-top: 1px solid var(--border);
+  padding: 5.5rem var(--l-container);
+  border-top: 1px solid var(--l-border);
 }
 
 .landing-final-cta h2 {
@@ -321,47 +370,88 @@
 }
 
 .landing-final-cta p {
-  color: var(--text-secondary);
+  color: var(--l-text-secondary);
   margin-bottom: 2rem;
 }
 
-/* Footer */
+/* Footer — línea de estado */
 .landing-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem max(1.5rem, calc((100% - 72rem) / 2));
-  border-top: 1px solid var(--border);
-  color: var(--text-muted);
+  padding: 1.5rem var(--l-container);
+  border-top: 1px solid var(--l-border);
   font-size: 0.875rem;
+  color: var(--l-text-muted);
 }
 
-/* Animación de entrada del hero */
+.landing-footer-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+}
+
+/* Motion — solo si el usuario no lo reduce */
 @media (prefers-reduced-motion: no-preference) {
-  .landing-hero-copy,
-  .landing-mockup {
-    animation: landing-rise 0.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+  .landing-caret {
+    animation: landing-blink 1.1s steps(2, start) infinite;
   }
 
-  .landing-mockup {
-    animation-delay: 0.12s;
-  }
-
-  @keyframes landing-rise {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
+  @keyframes landing-blink {
     to {
-      opacity: 1;
-      transform: translateY(0);
+      visibility: hidden;
     }
+  }
+
+  .landing-console-typing span {
+    animation: landing-pulse 1.2s ease-in-out infinite;
+  }
+
+  .landing-console-typing span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .landing-console-typing span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes landing-pulse {
+    0%, 60%, 100% {
+      opacity: 0.35;
+    }
+    30% {
+      opacity: 1;
+    }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.24s var(--l-ease), transform 0.24s var(--l-ease);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .landing-capability:nth-child(2) {
+    transition-delay: 0.04s;
+  }
+
+  .landing-capability:nth-child(3) {
+    transition-delay: 0.08s;
+  }
+
+  .landing-capability:nth-child(4) {
+    transition-delay: 0.12s;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .landing-mockup-typing span {
-    animation: none;
+  .landing-console-typing span {
     opacity: 0.6;
   }
 }
@@ -369,36 +459,50 @@
 /* Responsive */
 @media (max-width: 1024px) {
   .landing-hero {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    padding-top: 3.5rem;
-    padding-bottom: 4rem;
+    padding-top: 5rem;
+    padding-bottom: 5.5rem;
   }
 
-  .landing-capabilities,
-  .landing-features {
+  .landing-console {
+    align-self: stretch;
+    width: 100%;
+    margin-top: 3rem;
+  }
+
+  .landing-capabilities {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .landing-bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .landing-bento-dominant {
+    grid-column: span 2;
   }
 }
 
 @media (max-width: 768px) {
   .landing-section {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
   }
 
-  .landing-steps {
+  .landing-bento {
     grid-template-columns: 1fr;
+  }
+
+  .landing-bento-dominant {
+    grid-column: auto;
   }
 }
 
 @media (max-width: 480px) {
-  .landing-capabilities,
-  .landing-features {
+  .landing-capabilities {
     grid-template-columns: 1fr;
   }
 
-  .landing-hero-copy p {
+  .landing-sub {
     font-size: 1rem;
   }
 }
