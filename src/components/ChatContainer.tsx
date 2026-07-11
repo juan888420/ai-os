@@ -15,9 +15,26 @@ interface ChatContainerProps {
 
 export function ChatContainer({ messages, isLoading }: ChatContainerProps) {
   const endRef = useRef<HTMLDivElement>(null);
+  const isAtBottomRef = useRef(true);
+  const lastScrollTopRef = useRef(0);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
+    if (atBottom) {
+      isAtBottomRef.current = true;
+    } else if (el.scrollTop < lastScrollTopRef.current) {
+      // Solo desanclar cuando el usuario desplaza hacia arriba; el scroll
+      // programado hacia abajo emite eventos intermedios que no deben desanclar.
+      isAtBottomRef.current = false;
+    }
+    lastScrollTopRef.current = el.scrollTop;
+  };
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (isAtBottomRef.current) {
+      endRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   if (!messages || messages.length === 0) {
@@ -32,7 +49,7 @@ export function ChatContainer({ messages, isLoading }: ChatContainerProps) {
   }
 
   return (
-    <div className="chat-container">
+    <div className="chat-container" aria-live="polite" onScroll={handleScroll}>
       {messages.map((message) => (
         <ChatMessage
           key={message._id}
@@ -44,7 +61,11 @@ export function ChatContainer({ messages, isLoading }: ChatContainerProps) {
       {isLoading && (
         <div className="message-wrapper assistant-wrapper">
           <div className="message assistant-message loading">
-            <span className="loader"></span>
+            <span
+              className="loader"
+              role="status"
+              aria-label="El asistente está escribiendo"
+            ></span>
           </div>
         </div>
       )}

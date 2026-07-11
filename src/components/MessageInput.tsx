@@ -33,6 +33,7 @@ export function MessageInput({ onSend, disabled }: MessageInputProps) {
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Escribe un mensaje..."
+        aria-label="Escribe un mensaje"
         disabled={disabled}
         className="message-input"
       />

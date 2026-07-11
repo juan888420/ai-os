@@ -15,7 +15,7 @@
   --text-secondary: #cbd5e1;
   --text-muted: #94a3b8;
   --border: #334155;
-  --user-bg: #0ea5e9;
+  --user-bg: #0369a1;
   --user-text: #ffffff;
   --assistant-bg: #1e293b;
   --assistant-text: #f1f5f9;
@@ -48,6 +48,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  height: 100dvh;
   width: 100%;
   background: linear-gradient(135deg, var(--background) 0%, #1a1f35 100%);
 }
@@ -81,6 +82,7 @@ html, body, #root {
   flex: 1;
   overflow-y: auto;
   padding: 1.5rem;
+  padding-inline: max(1.5rem, calc((100% - 48rem) / 2));
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -207,11 +209,10 @@ html, body, #root {
 .message-timestamp {
   font-size: 0.75rem;
   color: var(--text-muted);
-  opacity: 0.8;
 }
 
 .user-message .message-timestamp {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Loading Animation */
@@ -236,6 +237,7 @@ html, body, #root {
   display: flex;
   gap: 0.75rem;
   padding: 1.25rem;
+  padding-inline: max(1.25rem, calc((100% - 48rem) / 2));
   background-color: var(--surface);
   border-top: 1px solid var(--border);
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
@@ -270,7 +272,7 @@ html, body, #root {
 
 .send-button {
   padding: 0.875rem 1.5rem;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
   color: white;
   border: none;
   border-radius: 0.75rem;
@@ -282,9 +284,14 @@ html, body, #root {
 }
 
 .send-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, #0c7ab4 100%);
+  background: linear-gradient(135deg, #075985 0%, #0c4a6e 100%);
   box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
   transform: translateY(-2px);
+}
+
+.send-button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .send-button:active:not(:disabled) {
