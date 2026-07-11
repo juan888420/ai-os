@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { ChatContainer } from "./components/ChatContainer";
+import { LandingPage } from "./components/LandingPage";
 import { MessageInput } from "./components/MessageInput";
 import "./App.css";
 
@@ -17,6 +19,8 @@ function getOrCreateAnonymousCustomerId(): string {
 const anonymousCustomerId = getOrCreateAnonymousCustomerId();
 
 export default function App() {
+  const [view, setView] = useState<"landing" | "chat">("landing");
+
   const messages = useQuery(api.messages.getMessages, {
     customerId: anonymousCustomerId,
   });
@@ -35,9 +39,20 @@ export default function App() {
     });
   };
 
+  if (view === "landing") {
+    return <LandingPage onOpenChat={() => setView("chat")} />;
+  }
+
   return (
     <div className="app">
       <div className="app-header">
+        <button
+          className="back-link"
+          onClick={() => setView("landing")}
+          aria-label="Volver a la página principal"
+        >
+          ← AI OS
+        </button>
         <h1>AI OS Chat</h1>
       </div>
       <div className="app-content">
