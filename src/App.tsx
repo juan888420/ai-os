@@ -11,6 +11,11 @@ export default function App() {
 
   const sendMessage = useMutation(api.messages.sendMessage);
 
+  const isWaitingForAssistant =
+    messages !== undefined &&
+    messages.length > 0 &&
+    messages[messages.length - 1].role === "user";
+
   const handleSend = (text: string) => {
     sendMessage({
       customerId: "demo",
@@ -24,8 +29,8 @@ export default function App() {
         <h1>AI OS Chat</h1>
       </div>
       <div className="app-content">
-        <ChatContainer messages={messages} />
-        <MessageInput onSend={handleSend} />
+        <ChatContainer messages={messages} isLoading={isWaitingForAssistant} />
+        <MessageInput onSend={handleSend} disabled={isWaitingForAssistant} />
       </div>
     </div>
   );

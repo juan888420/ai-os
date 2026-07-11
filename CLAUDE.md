@@ -256,3 +256,17 @@ Before implementing any feature:
 * Briefly explain why it was chosen.
 * Follow the Skill only if it does not conflict with the project's documentation or accepted architectural decisions.
 * If a conflict exists, explain it before proceeding.
+
+# Documentation Priority
+
+When documentation exists, always use it as the source of truth.
+
+Priority order:
+
+1. CLAUDE.md
+2. docs/decisions.md
+3. docs/architecture.md
+4. docs/roadmap.md
+5. Source code
+
+If documentation conflicts with the implementation, report the inconsistency before making changes.
