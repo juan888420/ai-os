@@ -1,18 +1,47 @@
-/* Landing — dirección visual propia (tinta profunda, hairlines, voz de sistema).
+/* Landing — dirección visual propia (grafito, morado profundo de ambiente,
+   azul eléctrico de acción, cyan como acento de dato, hairlines).
    Tokens locales de la landing; el chat conserva los suyos en App.css. */
 
+/* Fuentes autohospedadas (subset latino) */
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans-var.woff2") format("woff2");
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/ibm-plex-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/ibm-plex-mono-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 .landing {
-  --l-bg: #0b0e14;
-  --l-surface: #10141c;
-  --l-surface-2: #141a24;
+  --l-bg: #0a0b10;
+  --l-surface: #10121a;
+  --l-surface-2: #151827;
   --l-border: rgba(255, 255, 255, 0.07);
   --l-border-strong: rgba(255, 255, 255, 0.14);
   --l-text: #e8eaf0;
   --l-text-secondary: #a9b1c2;
   --l-text-muted: #8a93a6;
-  --l-accent: #38bdf8;
-  --l-cta: #0369a1;
-  --l-cta-hover: #075985;
+  --l-accent: #4f7dff; /* azul eléctrico: acción */
+  --l-violet: #8b5cf6; /* morado: ambiente y detalle, nunca texto de acción */
+  --l-purple-light: rgba(124, 58, 237, 0.12); /* luz ambiental */
+  --l-cyan: #22d3ee; /* acento de dato, micro-dosis */
+  --l-cta: #3d63f0;
+  --l-cta-hover: #2f4fd0;
   --l-ok: #34d399; /* solo estado */
   --l-ease: cubic-bezier(0.23, 1, 0.32, 1);
   --l-container: max(1.5rem, calc((100% - 72rem) / 2));
@@ -23,6 +52,12 @@
   background: var(--l-bg);
   color: var(--l-text);
   font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+
+.landing ::selection {
+  background: rgba(139, 92, 246, 0.35);
 }
 
 .landing main {
@@ -30,12 +65,41 @@
   flex-direction: column;
 }
 
+.landing-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Marca */
+.landing-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--l-text);
+}
+
+.landing-logomark {
+  width: 1.375rem;
+  height: 1.375rem;
+  color: var(--l-text);
+}
+
 /* Voz mono: kickers, índices, estados */
 .landing-kicker {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--l-text-muted);
   margin-bottom: 1rem;
@@ -49,17 +113,53 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 2rem;
   padding: 1rem var(--l-container);
-  background: rgba(11, 14, 20, 0.82);
+  background: rgba(10, 11, 16, 0.82);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--l-border);
 }
 
-.landing-brand {
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+.landing-nav-links {
+  display: flex;
+  gap: 1.75rem;
+  margin-right: auto;
+}
+
+.landing-nav-link {
+  position: relative;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--l-text-muted);
+  text-decoration: none;
+  transition: color 0.2s var(--l-ease);
+}
+
+.landing-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: var(--l-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s var(--l-ease);
+}
+
+.landing-nav-link:hover {
   color: var(--l-text);
+}
+
+.landing-nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.landing-nav-link:focus-visible {
+  outline: 2px solid var(--l-accent);
+  outline-offset: 4px;
+  border-radius: 2px;
 }
 
 /* CTA — plano, preciso, sin glow */
@@ -94,22 +194,59 @@
   font-size: 0.875rem;
 }
 
-/* Hero — editorial, un solo foco */
+/* Hero — copy izquierda, centro de operaciones derecha con offset */
 .landing-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 7rem var(--l-container) 8rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 4rem;
+  align-items: start;
+  padding: 6.5rem var(--l-container) 8rem;
+  isolation: isolate;
 }
 
-.landing-hero h1 {
-  max-width: 48rem;
-  font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+/* Luz ambiental: morado desde detrás del panel, azul tenue sobre el copy */
+.landing-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(46rem 30rem at 76% 30%, var(--l-purple-light), transparent 70%),
+    radial-gradient(40rem 24rem at 24% -10%, rgba(79, 125, 255, 0.06), transparent 70%);
+  pointer-events: none;
+}
+
+/* Grano sutil */
+.landing-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+}
+
+.landing-hero-copy h1 {
+  font-size: clamp(2.5rem, 5vw, 4.75rem);
   font-weight: 700;
-  line-height: 1.06;
-  letter-spacing: -0.03em;
-  text-wrap: balance;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
   margin-bottom: 1.5rem;
+}
+
+.landing-hero-copy h1 span {
+  display: block;
+}
+
+.landing-h1-accent {
+  width: fit-content;
+  white-space: nowrap;
+  background: linear-gradient(90deg, var(--l-accent), var(--l-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .landing-caret {
@@ -122,25 +259,73 @@
 }
 
 .landing-sub {
-  max-width: 36rem;
+  max-width: 33rem;
   font-size: 1.125rem;
   line-height: 1.6;
   color: var(--l-text-secondary);
-  margin-bottom: 2.5rem;
+  text-wrap: pretty;
+  margin-bottom: 2.25rem;
 }
 
-/* Consola de operaciones (mockup estático) */
-.landing-console {
-  align-self: flex-end;
-  width: min(34rem, 100%);
-  margin-top: 4rem;
+.landing-proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem 1.5rem;
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--l-text-muted);
+}
+
+.landing-proof li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.landing-proof-check {
+  display: inline-flex;
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--l-accent);
+  flex-shrink: 0;
+}
+
+.landing-proof-check svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Centro de operaciones (mockup estático) */
+.landing-ops {
+  position: relative;
+  margin-top: 3rem;
+}
+
+.landing-panel {
+  position: relative;
   background: var(--l-surface);
   border: 1px solid var(--l-border);
-  border-radius: 0.75rem;
-  overflow: hidden;
+  border-radius: 0.875rem;
+  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.65);
 }
 
-.landing-console-bar {
+/* Borde superior luminoso */
+.landing-panel::before,
+.landing-bento-dominant::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.45), transparent);
+  pointer-events: none;
+}
+
+.landing-panel-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -151,7 +336,7 @@
   color: var(--l-text-muted);
 }
 
-.landing-console-status {
+.landing-panel-status {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -163,56 +348,230 @@
   height: 0.4rem;
   border-radius: 50%;
   background: var(--l-ok);
+  flex-shrink: 0;
 }
 
-.landing-console-body {
+.landing-panel-body {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 1.25rem;
+  gap: 0.875rem;
+  padding: 1.125rem;
 }
 
-.landing-console-bubble {
-  max-width: 85%;
-  padding: 0.625rem 0.875rem;
-  border-radius: 0.625rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
+.landing-panel-greeting strong {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
-.landing-console-user {
-  align-self: flex-end;
-  background: var(--l-cta);
-  color: #ffffff;
-  border-bottom-right-radius: 0.2rem;
+.landing-panel-greeting span {
+  font-size: 0.75rem;
+  color: var(--l-text-muted);
 }
 
-.landing-console-assistant {
-  align-self: flex-start;
-  background: var(--l-surface-2);
-  color: var(--l-text);
-  border: 1px solid var(--l-border);
-  border-bottom-left-radius: 0.2rem;
+.landing-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.625rem;
 }
 
-.landing-console-typing {
+.landing-stat {
   display: flex;
-  gap: 0.3rem;
-  align-items: center;
-  min-height: 2rem;
+  flex-direction: column;
+  padding: 0.75rem 0.875rem;
+  background: var(--l-surface-2);
+  border: 1px solid var(--l-border);
+  border-radius: 0.625rem;
 }
 
-.landing-console-typing span {
-  width: 0.35rem;
-  height: 0.35rem;
+.landing-stat-top {
+  display: flex;
+  align-items: baseline;
+  gap: 0.375rem;
+}
+
+.landing-stat-value {
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.landing-stat-delta {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  color: var(--l-cyan);
+}
+
+.landing-stat-label {
+  margin-top: 0.25rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  color: var(--l-text-muted);
+}
+
+.landing-chart {
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--l-border);
+  border-radius: 0.625rem;
+}
+
+.landing-chart-label {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  color: var(--l-text-muted);
+}
+
+.landing-chart svg {
+  display: block;
+  width: 100%;
+  height: 2rem;
+  margin-top: 0.5rem;
+}
+
+.landing-chart polyline {
+  fill: none;
+  stroke: var(--l-cyan);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.landing-feed {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.landing-feed li {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.125rem;
+  font-size: 0.8125rem;
+}
+
+.landing-feed li + li {
+  border-top: 1px solid var(--l-border);
+}
+
+.landing-feed .landing-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.landing-feed-time {
+  margin-left: auto;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  color: var(--l-text-muted);
+}
+
+/* Módulos satélite */
+.landing-sats {
+  display: contents;
+}
+
+.landing-sat {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  background: var(--l-surface-2);
+  border: 1px solid var(--l-border-strong);
+  border-radius: 0.75rem;
+  box-shadow: 0 16px 40px -18px rgba(0, 0, 0, 0.75);
+}
+
+.landing-sat .landing-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.landing-sat-name {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.landing-sat-state {
+  display: block;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.625rem;
+  color: var(--l-text-muted);
+}
+
+.landing-sat-1 {
+  top: -4.75rem;
+  left: -1.5rem;
+}
+
+.landing-sat-2 {
+  top: 21%;
+  right: -1.25rem;
+}
+
+.landing-sat-3 {
+  bottom: 41%;
+  left: -3.75rem;
+}
+
+.landing-sat-4 {
+  bottom: -4.75rem;
+  right: 2.5rem;
+}
+
+/* Conectores: línea hairline hacia el panel (solo satélites exteriores) */
+.landing-sat-1::before,
+.landing-sat-4::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.5), rgba(139, 92, 246, 0.08));
+  pointer-events: none;
+}
+
+.landing-sat-1::before {
+  top: 100%;
+}
+
+.landing-sat-4::before {
+  bottom: 100%;
+  background: linear-gradient(0deg, rgba(139, 92, 246, 0.5), rgba(139, 92, 246, 0.08));
+}
+
+/* Punto de pulso que recorre el conector */
+.landing-sat-1::after,
+.landing-sat-4::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -1.5px;
   border-radius: 50%;
-  background: var(--l-text-muted);
+  background: var(--l-violet);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.landing-sat-1::after {
+  top: 100%;
+}
+
+.landing-sat-4::after {
+  bottom: 100%;
 }
 
 /* Secciones */
 .landing-section {
-  padding: 4.5rem var(--l-container);
+  padding: 5rem var(--l-container);
   border-top: 1px solid var(--l-border);
+  scroll-margin-top: 4.5rem;
 }
 
 .landing-section h2,
@@ -285,6 +644,7 @@
 }
 
 .landing-bento-dominant {
+  position: relative;
   grid-column: span 2;
   padding: 2.25rem;
   background: var(--l-surface-2);
@@ -305,7 +665,8 @@
   font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--l-text-secondary);
-  max-width: 34rem;
+  text-wrap: pretty;
+  max-width: 32rem;
 }
 
 .landing-bento-detail {
@@ -316,6 +677,60 @@
   padding: 0.5rem 0.875rem;
   border: 1px solid var(--l-border);
   border-radius: 2rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--l-text-muted);
+}
+
+/* En números — métricas + cita */
+.landing-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 0;
+}
+
+.landing-metric {
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--l-border-strong);
+}
+
+.landing-metric-label {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--l-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.landing-metric-value {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.landing-quote {
+  max-width: 40rem;
+  margin: 3.5rem 0 0;
+  padding: 0;
+  border: none;
+}
+
+.landing-quote p {
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--l-text-secondary);
+  text-wrap: pretty;
+  margin-bottom: 1rem;
+}
+
+.landing-quote footer {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
   font-size: 0.75rem;
   color: var(--l-text-muted);
@@ -356,6 +771,7 @@
   font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--l-text-secondary);
+  text-wrap: pretty;
 }
 
 /* CTA final */
@@ -374,14 +790,80 @@
   margin-bottom: 2rem;
 }
 
-/* Footer — línea de estado */
+/* Footer — producto */
 .landing-footer {
+  border-top: 1px solid var(--l-border);
+  padding: 3.5rem var(--l-container) 1.5rem;
+}
+
+.landing-footer-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem;
+  padding-bottom: 2.5rem;
+}
+
+.landing-footer-brand p {
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
+  color: var(--l-text-muted);
+  max-width: 18rem;
+}
+
+.landing-footer-cols {
+  display: flex;
+  gap: 4rem;
+}
+
+.landing-footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.landing-footer-heading {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--l-text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.landing-footer-col a,
+.landing-footer-link {
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: var(--l-text-secondary);
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s var(--l-ease);
+}
+
+.landing-footer-col a:hover,
+.landing-footer-link:hover {
+  color: var(--l-text);
+}
+
+.landing-footer-col a:focus-visible,
+.landing-footer-link:focus-visible {
+  outline: 2px solid var(--l-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.landing-footer-bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem var(--l-container);
+  padding-top: 1.5rem;
   border-top: 1px solid var(--l-border);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--l-text-muted);
 }
 
@@ -405,24 +887,48 @@
     }
   }
 
-  .landing-console-typing span {
-    animation: landing-pulse 1.2s ease-in-out infinite;
+  /* Pulso que viaja por los conectores de los módulos */
+  .landing-sat-1::after {
+    animation: landing-travel-down 6s var(--l-ease) infinite;
   }
 
-  .landing-console-typing span:nth-child(2) {
-    animation-delay: 0.2s;
+  .landing-sat-4::after {
+    animation: landing-travel-up 6s var(--l-ease) 3s infinite;
   }
 
-  .landing-console-typing span:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-
-  @keyframes landing-pulse {
-    0%, 60%, 100% {
-      opacity: 0.35;
+  @keyframes landing-travel-down {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
     }
-    30% {
+    8% {
       opacity: 1;
+    }
+    38% {
+      transform: translateY(24px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(24px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes landing-travel-up {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    8% {
+      opacity: 1;
+    }
+    38% {
+      transform: translateY(-24px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(-24px);
+      opacity: 0;
     }
   }
 
@@ -451,22 +957,43 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .landing-console-typing span {
-    opacity: 0.6;
+  .landing-sat-1::after,
+  .landing-sat-4::after {
+    display: none;
   }
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
   .landing-hero {
-    padding-top: 5rem;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-top: 4.5rem;
     padding-bottom: 5.5rem;
   }
 
-  .landing-console {
-    align-self: stretch;
-    width: 100%;
-    margin-top: 3rem;
+  .landing-ops {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .landing-sats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .landing-sat {
+    position: static;
+  }
+
+  .landing-sat-1::before,
+  .landing-sat-4::before,
+  .landing-sat-1::after,
+  .landing-sat-4::after {
+    display: none;
   }
 
   .landing-capabilities {
@@ -483,6 +1010,10 @@
 }
 
 @media (max-width: 768px) {
+  .landing-nav-links {
+    display: none;
+  }
+
   .landing-section {
     padding-top: 3.5rem;
     padding-bottom: 3.5rem;
@@ -495,6 +1026,16 @@
   .landing-bento-dominant {
     grid-column: auto;
   }
+
+  .landing-metrics {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .landing-footer-top {
+    flex-direction: column;
+    gap: 2rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -504,5 +1045,13 @@
 
   .landing-sub {
     font-size: 1rem;
+  }
+
+  .landing-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-footer-cols {
+    gap: 2.5rem;
   }
 }

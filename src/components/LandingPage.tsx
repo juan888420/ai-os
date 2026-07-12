@@ -5,6 +5,16 @@ interface LandingPageProps {
   onOpenChat: () => void;
 }
 
+function Logomark() {
+  return (
+    <svg className="landing-logomark" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="7.5" fill="none" stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.5" />
+      <path d="M10.5 10.5 L16.5 16 L10.5 21.5" fill="none" stroke="var(--l-accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <line x1="19" y1="21.5" x2="24" y2="21.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const IconChat = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 16.1-3.8z" />
@@ -32,6 +42,47 @@ const IconZap = (
     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
   </svg>
 );
+
+const IconCheck = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+);
+
+const IconUser = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
+const IconDoc = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+  </svg>
+);
+
+const proofItems = ["sin registro", "respuesta en tiempo real", "todo queda registrado"];
+
+const panelStats = [
+  { value: "132", delta: "+12%", label: "conversaciones" },
+  { value: "28", delta: "+8%", label: "citas agendadas" },
+  { value: "64", delta: "+10%", label: "tareas completadas" },
+];
+
+const panelFeed = [
+  { icon: IconCalendar, text: "Cita agendada", time: "hace 15 min" },
+  { icon: IconMail, text: "Email enviado", time: "hace 1 h" },
+  { icon: IconDoc, text: "Documento generado", time: "hace 2 h" },
+];
+
+const satellites = [
+  { icon: IconCalendar, label: "Agenda" },
+  { icon: IconMail, label: "Email" },
+  { icon: IconUser, label: "CRM" },
+  { icon: IconDoc, label: "Documentos" },
+];
 
 const capabilities = [
   { index: "01", icon: IconChat, label: "Responder clientes" },
@@ -65,6 +116,12 @@ const features = [
   },
 ];
 
+const metrics = [
+  { value: "< 3 s", label: "respuesta media" },
+  { value: "24/7", label: "disponibilidad" },
+  { value: "100%", label: "queda registrado" },
+];
+
 const steps = [
   {
     title: "Escribe lo que necesitas",
@@ -78,6 +135,12 @@ const steps = [
     title: "Recibe la respuesta al momento",
     description: "Todo queda registrado en la conversación, en tiempo real.",
   },
+];
+
+const navLinks = [
+  { href: "#capacidades", label: "Capacidades" },
+  { href: "#caracteristicas", label: "Características" },
+  { href: "#como-funciona", label: "Cómo funciona" },
 ];
 
 function useReveal() {
@@ -105,7 +168,17 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
   return (
     <div className="landing">
       <nav className="landing-nav" aria-label="Principal">
-        <span className="landing-brand">AI OS</span>
+        <span className="landing-brand">
+          <Logomark />
+          AI OS
+        </span>
+        <div className="landing-nav-links">
+          {navLinks.map((link) => (
+            <a key={link.href} href={link.href} className="landing-nav-link">
+              {link.label}
+            </a>
+          ))}
+        </div>
         <button className="landing-cta landing-cta-small" onClick={onOpenChat}>
           Abrir chat
         </button>
@@ -113,49 +186,91 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
 
       <main>
         <section className="landing-hero">
-          <p className="landing-kicker">Sistema operativo de negocio</p>
-          <h1>
-            Escribe lo que tu negocio necesita.
-            <br />
-            AI OS lo ejecuta.
-            <span className="landing-caret" aria-hidden="true" />
-          </h1>
-          <p className="landing-sub">
-            Un asistente conversacional que entiende tu negocio, responde a tus
-            clientes y ejecuta acciones reales. Sin configuraciones complejas.
-          </p>
-          <button className="landing-cta" onClick={onOpenChat}>
-            Probar el chat
-          </button>
-
-          <div className="landing-console reveal" aria-hidden="true">
-            <div className="landing-console-bar">
-              <span className="landing-console-title">aios — operaciones</span>
-              <span className="landing-console-status">
-                <span className="landing-status-dot" />
-                en línea
+          <div className="landing-hero-copy">
+            <p className="landing-kicker">Sistema operativo de IA para tu negocio</p>
+            <h1>
+              <span>Tu negocio.</span>
+              <span>Un sistema.</span>
+              <span className="landing-h1-accent">
+                IA que ejecuta.
+                <span className="landing-caret" aria-hidden="true" />
               </span>
+            </h1>
+            <p className="landing-sub">
+              Un asistente conversacional que entiende tu negocio, responde a
+              tus clientes y ejecuta acciones reales. Sin configuraciones
+              complejas.
+            </p>
+            <button className="landing-cta" onClick={onOpenChat}>
+              Probar el chat
+            </button>
+            <ul className="landing-proof">
+              {proofItems.map((item) => (
+                <li key={item}>
+                  <span className="landing-proof-check">{IconCheck}</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="landing-ops reveal" aria-hidden="true">
+            <div className="landing-panel">
+              <div className="landing-panel-bar">
+                <span className="landing-panel-title">aios — resumen</span>
+                <span className="landing-panel-status">
+                  <span className="landing-status-dot" />
+                  en línea
+                </span>
+              </div>
+              <div className="landing-panel-body">
+                <div className="landing-panel-greeting">
+                  <strong>Resumen general</strong>
+                  <span>todo tu negocio, en un solo lugar</span>
+                </div>
+                <div className="landing-stats">
+                  {panelStats.map((stat) => (
+                    <div key={stat.label} className="landing-stat">
+                      <span className="landing-stat-top">
+                        <span className="landing-stat-value">{stat.value}</span>
+                        <span className="landing-stat-delta">{stat.delta}</span>
+                      </span>
+                      <span className="landing-stat-label">{stat.label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="landing-chart">
+                  <span className="landing-chart-label">actividad — última semana</span>
+                  <svg viewBox="0 0 120 32" preserveAspectRatio="none">
+                    <polyline points="0,24 15,20 30,22 45,13 60,17 75,9 90,12 105,5 120,8" />
+                  </svg>
+                </div>
+                <ul className="landing-feed">
+                  {panelFeed.map((entry) => (
+                    <li key={entry.text}>
+                      <span className="landing-icon">{entry.icon}</span>
+                      {entry.text}
+                      <span className="landing-feed-time">{entry.time}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <div className="landing-console-body">
-              <div className="landing-console-bubble landing-console-user">
-                ¿Puedes agendar una reunión con el equipo mañana a las 10?
-              </div>
-              <div className="landing-console-bubble landing-console-assistant">
-                Hecho. Reunión creada para mañana a las 10:00 y aviso enviado al equipo.
-              </div>
-              <div className="landing-console-bubble landing-console-user">
-                Perfecto, redacta un resumen para el cliente.
-              </div>
-              <div className="landing-console-bubble landing-console-assistant landing-console-typing">
-                <span />
-                <span />
-                <span />
-              </div>
+            <div className="landing-sats">
+              {satellites.map((sat, index) => (
+                <div key={sat.label} className={`landing-sat landing-sat-${index + 1}`}>
+                  <span className="landing-icon">{sat.icon}</span>
+                  <span>
+                    <span className="landing-sat-name">{sat.label}</span>
+                    <span className="landing-sat-state">activo</span>
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        <section className="landing-section" aria-labelledby="capabilities-title">
+        <section id="capacidades" className="landing-section" aria-labelledby="capabilities-title">
           <p className="landing-kicker">01 — Capacidades</p>
           <h2 id="capabilities-title">¿Qué puede hacer AI OS?</h2>
           <ul className="landing-capabilities reveal">
@@ -169,7 +284,7 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
           </ul>
         </section>
 
-        <section className="landing-section" aria-labelledby="features-title">
+        <section id="caracteristicas" className="landing-section" aria-labelledby="features-title">
           <p className="landing-kicker">02 — Características</p>
           <h2 id="features-title">Un solo lugar para operar tu negocio</h2>
           <div className="landing-bento">
@@ -191,8 +306,30 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
           </div>
         </section>
 
-        <section className="landing-section" aria-labelledby="steps-title">
-          <p className="landing-kicker">03 — Cómo funciona</p>
+        <section className="landing-section landing-trust" aria-labelledby="trust-title">
+          <p className="landing-kicker">03 — En números</p>
+          <h2 id="trust-title" className="landing-visually-hidden">
+            AI OS en números
+          </h2>
+          <dl className="landing-metrics reveal">
+            {metrics.map((metric) => (
+              <div key={metric.label} className="landing-metric">
+                <dt className="landing-metric-label">{metric.label}</dt>
+                <dd className="landing-metric-value">{metric.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <blockquote className="landing-quote reveal">
+            <p>
+              “La conversación es la interfaz. Todo lo demás — agenda, emails,
+              tareas — debería ocurrir solo.”
+            </p>
+            <footer>— Principio de diseño de AI OS</footer>
+          </blockquote>
+        </section>
+
+        <section id="como-funciona" className="landing-section" aria-labelledby="steps-title">
+          <p className="landing-kicker">04 — Cómo funciona</p>
           <h2 id="steps-title">Tres pasos, cero fricción</h2>
           <ol className="landing-steps">
             {steps.map((step) => (
@@ -217,12 +354,39 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
       </main>
 
       <footer className="landing-footer">
-        <span className="landing-brand">AI OS</span>
-        <span className="landing-footer-status">
-          aios v0.1 — mvp
-          <span className="landing-status-dot" />
-          en línea
-        </span>
+        <div className="landing-footer-top">
+          <div className="landing-footer-brand">
+            <span className="landing-brand">
+              <Logomark />
+              AI OS
+            </span>
+            <p>El sistema operativo de IA para tu negocio.</p>
+          </div>
+          <nav className="landing-footer-cols" aria-label="Pie de página">
+            <div className="landing-footer-col">
+              <p className="landing-footer-heading">Producto</p>
+              {navLinks.map((link) => (
+                <a key={link.href} href={link.href}>
+                  {link.label}
+                </a>
+              ))}
+            </div>
+            <div className="landing-footer-col">
+              <p className="landing-footer-heading">Empezar</p>
+              <button className="landing-footer-link" onClick={onOpenChat}>
+                Abrir el chat
+              </button>
+            </div>
+          </nav>
+        </div>
+        <div className="landing-footer-bottom">
+          <span>© {new Date().getFullYear()} AI OS</span>
+          <span className="landing-footer-status">
+            aios v0.1 — mvp
+            <span className="landing-status-dot" />
+            en línea
+          </span>
+        </div>
       </footer>
     </div>
   );
