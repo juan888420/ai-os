@@ -63,25 +63,62 @@ const IconDoc = (
   </svg>
 );
 
+const IconWhatsApp = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z" />
+    <path
+      d="M9.2 8.4c.2 3 3.4 6.2 6.4 6.4l1-1.8-2.2-1.1-.9.7c-1.2-.6-2.5-1.9-3.1-3.1l.7-.9-1.1-2.2z"
+      fill="currentColor"
+      stroke="none"
+    />
+  </svg>
+);
+
+const IconGrid = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3" y="3" width="7" height="7" rx="1.5" />
+    <rect x="14" y="3" width="7" height="7" rx="1.5" />
+    <rect x="3" y="14" width="7" height="7" rx="1.5" />
+    <rect x="14" y="14" width="7" height="7" rx="1.5" />
+  </svg>
+);
+
+const IconSpark = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+    <path d="M18.5 15.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z" />
+  </svg>
+);
+
 const proofItems = ["sin registro", "respuesta en tiempo real", "todo queda registrado"];
 
+const sideItems = [
+  { icon: IconGrid, label: "Resumen", active: true },
+  { icon: IconChat, label: "Conversaciones", active: false },
+  { icon: IconCalendar, label: "Citas", active: false },
+  { icon: IconDoc, label: "Documentos", active: false },
+  { icon: IconZap, label: "Automatizar", active: false },
+];
+
 const panelStats = [
-  { value: "132", delta: "+12%", label: "conversaciones" },
-  { value: "28", delta: "+8%", label: "citas agendadas" },
-  { value: "64", delta: "+10%", label: "tareas completadas" },
+  { icon: IconWhatsApp, tint: "#25d366", value: "132", delta: "+12%", label: "mensajes hoy" },
+  { icon: IconMail, tint: "#ea4335", value: "47", delta: "+8%", label: "emails enviados" },
+  { icon: IconCalendar, tint: "#4285f4", value: "28", delta: "+10%", label: "citas esta semana" },
 ];
 
 const panelFeed = [
-  { icon: IconCalendar, text: "Cita agendada", time: "hace 15 min" },
-  { icon: IconMail, text: "Email enviado", time: "hace 1 h" },
-  { icon: IconDoc, text: "Documento generado", time: "hace 2 h" },
+  { icon: IconWhatsApp, tint: "#25d366", text: "Nueva conversación · Juan Pérez", time: "hace 2 min" },
+  { icon: IconCalendar, tint: "#4285f4", text: "Cita agendada · María González", time: "hace 15 min" },
+  { icon: IconMail, tint: "#ea4335", text: "Email enviado · propuesta comercial", time: "hace 1 h" },
 ];
 
 const satellites = [
-  { icon: IconCalendar, label: "Agenda" },
-  { icon: IconMail, label: "Email" },
-  { icon: IconUser, label: "CRM" },
-  { icon: IconDoc, label: "Documentos" },
+  { icon: IconMail, tint: "#ea4335", label: "Gmail", state: "Conectado", stateClass: "ok" },
+  { icon: IconCalendar, tint: "#4285f4", label: "Google Calendar", state: "Sincronizando", stateClass: "sync" },
+  { icon: IconWhatsApp, tint: "#25d366", label: "WhatsApp", state: "Conectado", stateClass: "ok" },
+  { icon: IconUser, tint: "var(--l-accent)", label: "CRM", state: "Conectado", stateClass: "ok" },
+  { icon: IconDoc, tint: "var(--l-accent-2)", label: "Documentos", state: "Activo", stateClass: "active" },
+  { icon: IconSpark, tint: "var(--l-accent-2)", label: "IA", state: "Activo", stateClass: "active" },
 ];
 
 const capabilities = [
@@ -201,9 +238,15 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
               tus clientes y ejecuta acciones reales. Sin configuraciones
               complejas.
             </p>
-            <button className="landing-cta" onClick={onOpenChat}>
-              Probar el chat
-            </button>
+            <div className="landing-hero-actions">
+              <button className="landing-cta" onClick={onOpenChat}>
+                Probar AI OS ahora
+                <span className="landing-cta-arrow" aria-hidden="true">→</span>
+              </button>
+              <a className="landing-cta-ghost" href="#como-funciona">
+                Ver cómo funciona
+              </a>
+            </div>
             <ul className="landing-proof">
               {proofItems.map((item) => (
                 <li key={item}>
@@ -217,52 +260,80 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
           <div className="landing-ops reveal" aria-hidden="true">
             <div className="landing-panel">
               <div className="landing-panel-bar">
-                <span className="landing-panel-title">aios — resumen</span>
+                <span className="landing-panel-title">aios · panel de control</span>
                 <span className="landing-panel-status">
                   <span className="landing-status-dot" />
                   en línea
                 </span>
               </div>
-              <div className="landing-panel-body">
-                <div className="landing-panel-greeting">
-                  <strong>Resumen general</strong>
-                  <span>todo tu negocio, en un solo lugar</span>
-                </div>
-                <div className="landing-stats">
-                  {panelStats.map((stat) => (
-                    <div key={stat.label} className="landing-stat">
-                      <span className="landing-stat-top">
-                        <span className="landing-stat-value">{stat.value}</span>
-                        <span className="landing-stat-delta">{stat.delta}</span>
-                      </span>
-                      <span className="landing-stat-label">{stat.label}</span>
-                    </div>
+              <div className="landing-panel-main">
+                <aside className="landing-panel-side">
+                  {sideItems.map((item) => (
+                    <span
+                      key={item.label}
+                      className={`landing-side-item${item.active ? " landing-side-active" : ""}`}
+                    >
+                      <span className="landing-icon">{item.icon}</span>
+                      {item.label}
+                    </span>
                   ))}
+                </aside>
+                <div className="landing-panel-content">
+                  <div className="landing-panel-greeting">
+                    <span className="landing-avatar">A</span>
+                    <span>
+                      <strong>Hola, Alejandro</strong>
+                      <span>esto es lo que pasa en tu negocio</span>
+                    </span>
+                  </div>
+                  <div className="landing-stats">
+                    {panelStats.map((stat) => (
+                      <div key={stat.label} className="landing-stat">
+                        <span className="landing-stat-top">
+                          <span className="landing-stat-value">{stat.value}</span>
+                          <span className="landing-stat-delta">{stat.delta}</span>
+                        </span>
+                        <span className="landing-stat-label">
+                          <span className="landing-icon" style={{ color: stat.tint }}>
+                            {stat.icon}
+                          </span>
+                          {stat.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="landing-chart">
+                    <span className="landing-chart-label">actividad · última semana</span>
+                    <svg viewBox="0 0 120 32" preserveAspectRatio="none">
+                      <polyline points="0,24 15,20 30,22 45,13 60,17 75,9 90,12 105,5 120,8" />
+                    </svg>
+                  </div>
+                  <ul className="landing-feed">
+                    {panelFeed.map((entry) => (
+                      <li key={entry.text}>
+                        <span className="landing-icon" style={{ color: entry.tint }}>
+                          {entry.icon}
+                        </span>
+                        {entry.text}
+                        <span className="landing-feed-time">{entry.time}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <div className="landing-chart">
-                  <span className="landing-chart-label">actividad — última semana</span>
-                  <svg viewBox="0 0 120 32" preserveAspectRatio="none">
-                    <polyline points="0,24 15,20 30,22 45,13 60,17 75,9 90,12 105,5 120,8" />
-                  </svg>
-                </div>
-                <ul className="landing-feed">
-                  {panelFeed.map((entry) => (
-                    <li key={entry.text}>
-                      <span className="landing-icon">{entry.icon}</span>
-                      {entry.text}
-                      <span className="landing-feed-time">{entry.time}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
             <div className="landing-sats">
               {satellites.map((sat, index) => (
                 <div key={sat.label} className={`landing-sat landing-sat-${index + 1}`}>
-                  <span className="landing-icon">{sat.icon}</span>
+                  <span className="landing-icon" style={{ color: sat.tint }}>
+                    {sat.icon}
+                  </span>
                   <span>
                     <span className="landing-sat-name">{sat.label}</span>
-                    <span className="landing-sat-state">activo</span>
+                    <span className={`landing-sat-state landing-state-${sat.stateClass}`}>
+                      <span className="landing-sat-dot" />
+                      {sat.state}
+                    </span>
                   </span>
                 </div>
               ))}
@@ -271,7 +342,7 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
         </section>
 
         <section id="capacidades" className="landing-section" aria-labelledby="capabilities-title">
-          <p className="landing-kicker">01 — Capacidades</p>
+          <p className="landing-kicker">01 · Capacidades</p>
           <h2 id="capabilities-title">¿Qué puede hacer AI OS?</h2>
           <ul className="landing-capabilities reveal">
             {capabilities.map((item) => (
@@ -285,7 +356,7 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
         </section>
 
         <section id="caracteristicas" className="landing-section" aria-labelledby="features-title">
-          <p className="landing-kicker">02 — Características</p>
+          <p className="landing-kicker">02 · Características</p>
           <h2 id="features-title">Un solo lugar para operar tu negocio</h2>
           <div className="landing-bento">
             {features.map((feature) => (
@@ -307,7 +378,7 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
         </section>
 
         <section className="landing-section landing-trust" aria-labelledby="trust-title">
-          <p className="landing-kicker">03 — En números</p>
+          <p className="landing-kicker">03 · En números</p>
           <h2 id="trust-title" className="landing-visually-hidden">
             AI OS en números
           </h2>
@@ -321,15 +392,15 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
           </dl>
           <blockquote className="landing-quote reveal">
             <p>
-              “La conversación es la interfaz. Todo lo demás — agenda, emails,
-              tareas — debería ocurrir solo.”
+              “La conversación es la interfaz. Todo lo demás (agenda, emails,
+              tareas) debería ocurrir solo.”
             </p>
-            <footer>— Principio de diseño de AI OS</footer>
+            <footer>Principio de diseño de AI OS</footer>
           </blockquote>
         </section>
 
         <section id="como-funciona" className="landing-section" aria-labelledby="steps-title">
-          <p className="landing-kicker">04 — Cómo funciona</p>
+          <p className="landing-kicker">04 · Cómo funciona</p>
           <h2 id="steps-title">Tres pasos, cero fricción</h2>
           <ol className="landing-steps">
             {steps.map((step) => (
@@ -348,7 +419,8 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
           <h2>Empieza a trabajar con tu asistente</h2>
           <p>Sin registro, sin configuración. Abre el chat y escribe.</p>
           <button className="landing-cta" onClick={onOpenChat}>
-            Abrir el chat
+            Probar AI OS ahora
+            <span className="landing-cta-arrow" aria-hidden="true">→</span>
           </button>
         </section>
       </main>
@@ -382,7 +454,7 @@ export function LandingPage({ onOpenChat }: LandingPageProps) {
         <div className="landing-footer-bottom">
           <span>© {new Date().getFullYear()} AI OS</span>
           <span className="landing-footer-status">
-            aios v0.1 — mvp
+            aios v0.1 · mvp
             <span className="landing-status-dot" />
             en línea
           </span>
