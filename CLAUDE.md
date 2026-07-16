@@ -205,13 +205,15 @@ Leave the project easier to understand after every change.
 
 Permanent documentation is stored in:
 
-docs/architecture.md
+Docs/architecture.md
 
-docs/roadmap.md
+Docs/roadmap.md
 
-docs/decisions.md
+Docs/decisions.md
 
-docs/audit.md
+Docs/audit.md
+
+Docs/prompts.md
 
 This file contains only permanent development rules.
 
@@ -264,9 +266,9 @@ When documentation exists, always use it as the source of truth.
 Priority order:
 
 1. CLAUDE.md
-2. docs/decisions.md
-3. docs/architecture.md
-4. docs/roadmap.md
+2. Docs/decisions.md
+3. Docs/architecture.md
+4. Docs/roadmap.md
 5. Source code
 
 If documentation conflicts with the implementation, report the inconsistency before making changes.
