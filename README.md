@@ -18,6 +18,7 @@ email generation). Currently an MVP focused on the core chat experience.
 ![Uploading demo.png…]()
 
 
+
 ## Features
 
 - Real-time chat backed by Convex reactive queries
