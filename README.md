@@ -15,6 +15,8 @@ through external integrations (customer support, scheduling, CRM assistance,
 email generation). Currently an MVP focused on the core chat experience.
 
 <!-- Add a screenshot or demo GIF here: ![Demo](public/demo.png) -->
+![Uploading Captura de pantalla_ai_os.png…]()
+
 
 ## Features
 
